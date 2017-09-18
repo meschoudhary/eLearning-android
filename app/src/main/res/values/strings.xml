@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">Salam E-Learning</string>
+    <string name="app_logo">Salam E-Learning</string>
+
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_signin">SIGN IN</string>
+    <string name="login_forget">Forgot your password ?</string>
+    <string name="login_create">Create an account ?</string>
+    <string name="login_hint_username">Enter username</string>
+    <string name="login_hint_password">Enter password</string>
+
+    <string name="signup_username">Username</string>
+    <string name="signup_password">Password</string>
+    <string name="signup_email">Email</string>
+    <string name="signup_skill">Skill</string>
+    <string name="signup_pic">Student Profile pic</string>
+    <string name="signup_signup_button">Create Account</string>
+    <string name="signup_hint_username">Enter username</string>
+    <string name="signup_hint_password">Enter password</string>
+    <string name="signup_hint_email">Enter email</string>
+    <string name="signup_hint_skill">Select Skills</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="home_fragment">Home</string>
+    <string name="profile_fragment">Learning History</string>
+    <string name="category_fragment">Category</string>
+
+    <string name="home_heading_text">Learn the most in demand skills</string>
+    <string name="home_heading_sub_text">Find content in business, tech and creative from industry experts.</string>
+
+    <string name="course">Course </string>
+    <string name="course_cell_skill">Because you are interested in %s</string>
+    <string name="course_cell_viewers"> - %s viewers</string>
+    <string name="course_cell_instructor"> By: %s </string>
+    <string name="course_cell_instructor_id"> All Courses by %s </string>
+    <string name="profile_instructor_id"> All Courses by %s </string>
+    <string name="profile_publications"> Publication by %s </string>
+
+    <string name="profile_saved_heading">Saved</string>
+    <string name="profile_number_of_saved">See all (%s)</string>
+
+    <string name="all_skill_of_student">Skill you\'re interested in</string>
+    <string name="student_add_more_skills">Add more skills</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

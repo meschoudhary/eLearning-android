@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,8 +71,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
     private String typeValue = "all";
     private String durationValue = "0";
 
-    private ImageView mNoSearchResultsImage;
-    private TextView mNoSearchResultsText;
+    private RelativeLayout mNoSearchResultsView;;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,8 +81,7 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
         List<User> users = User.getLoggedInUser();
         user = users.get(0);
 
-        mNoSearchResultsImage = findViewById(R.id.no_search_result_image);
-        mNoSearchResultsText = findViewById(R.id.no_search_result_text);
+        mNoSearchResultsView = findViewById(R.id.no_results_view);
 
         progressBar = findViewById(R.id.progress_bar);
         courseList = new ArrayList<>();
@@ -128,15 +127,21 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
             @Override
             public boolean onSuggestionClick(int position) {
 
-                CursorAdapter c = searchView.getSuggestionsAdapter();
-                Cursor cur = c.getCursor();
-                cur.moveToPosition(position);
-                String val = cur.getString(1);
+                Intent intent;
+                SearchSuggestion searchSuggestion = searchSuggestionArrayList.get(position);
+                String val = searchSuggestion.getTitle();
 
-                Intent courseIntent = new Intent(SearchActivity.this, CourseActivity.class);
-                courseIntent.putExtra("courseID", val);
-                courseIntent.putExtra("userID", user.getServerId());
-                startActivity(courseIntent);
+                if(searchSuggestion.getTypeID().isEmpty()){
+                    intent = new Intent(SearchActivity.this, CourseActivity.class);
+                    intent.putExtra("courseID", searchSuggestion.getServerID());
+                    intent.putExtra("userID", user.getServerId());
+                    startActivity(intent);
+                }else {
+                    intent = new Intent(SearchActivity.this, SearchActivity.class);
+                    intent.setAction(Intent.ACTION_SEARCH);
+                    intent.putExtra(SearchManager.QUERY, val);
+                    startActivity(intent);
+                }
 
                 return true;
             }
@@ -482,15 +487,13 @@ public class SearchActivity extends AppCompatActivity implements FilterFragment.
                             }
 
                             searchedCoursesAdapter.refreshAdapter(courseList);
-                            mNoSearchResultsText.setVisibility(View.GONE);
+                            mNoSearchResultsView.setVisibility(View.GONE);
                             progressBar.setVisibility(View.GONE);
-                            mNoSearchResultsImage.setVisibility(View.GONE);
                             Log.d(TAG, data.toString());
 
                         }else{
-                            mNoSearchResultsText.setVisibility(View.VISIBLE);
+                            mNoSearchResultsView.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
-                            mNoSearchResultsImage.setVisibility(View.VISIBLE);
 
                         }
                         Log.d(TAG, "everything should be done");

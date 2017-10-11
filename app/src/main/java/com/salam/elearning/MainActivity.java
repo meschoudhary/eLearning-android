@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog alertDialog;
     private SpannableString actionBarTitle;
 
+    private SearchView searchView;
+
     SearchSuggestionAdaptor mSearchViewAdapter;
     public static String[] columns = new String[]{"_id", "SERVERID","IMAGE", "TITLE", "TYPE", "TYPEID"};
     private ArrayList<SearchSuggestion> searchSuggestionArrayList = new ArrayList<>();
@@ -269,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchViewAdapter = new SearchSuggestionAdaptor(this, R.layout.cell_search_suggestion, null, columns, null, -1000, user.getServerId());
         searchView.setSuggestionsAdapter(mSearchViewAdapter);
 
@@ -467,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
             if(!response.isEmpty()){
 
                 try {
-
+                    searchSuggestionArrayList = new ArrayList<>();
                     Log.d(TAG, response);
 
                     JSONObject jsonObject = new JSONObject(response);

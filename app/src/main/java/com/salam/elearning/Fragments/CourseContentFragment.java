@@ -108,6 +108,7 @@ public class CourseContentFragment extends Fragment implements BetterVideoCallba
 
             }
         });
+
         mVideoPlayer.setButtonDrawable(0, PLAY_BUTTON);
         mVideoPlayer.setButtonDrawable(1, PAUSE_BUTTON);
         mVideoPlayer.reset();
@@ -130,8 +131,16 @@ public class CourseContentFragment extends Fragment implements BetterVideoCallba
     @Override
     public void onPause() {
         super.onPause();
+
         // Make sure the player stops playing if the user presses the home button.
         mVideoPlayer.pause();
+        //mVideoPlayer.release();
+    }
+
+    @Override
+    public void onResume() {
+        mVideoPlayer.start();
+        super.onResume();
     }
 
     // Methods for the implemented EasyVideoCallback
@@ -163,7 +172,7 @@ public class CourseContentFragment extends Fragment implements BetterVideoCallba
 
     @Override
     public void onError(BetterVideoPlayer player, Exception e) {
-        Log.i(TAG, "Error " +e.getMessage());
+        Log.i(TAG, "Error " + e.getMessage());
     }
 
     @Override

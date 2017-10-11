@@ -2,6 +2,7 @@ package com.salam.elearning.Fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.salam.elearning.Adapters.CourseLikeAdapter;
@@ -23,6 +25,7 @@ import com.salam.elearning.Models.CourseExercise;
 import com.salam.elearning.Models.CourseSections;
 import com.salam.elearning.Models.Skill;
 import com.salam.elearning.Models.User;
+import com.salam.elearning.ProfileActivity;
 import com.salam.elearning.R;
 import com.squareup.picasso.Picasso;
 
@@ -37,34 +40,9 @@ public class CourseOverviewFragment extends Fragment {
 
     private static final String TAG = "OverviewFragment";
 
-    private View fragmentView;
     private Context context;
 
-    private TextView mDuration;
-    private TextView mLevel;
-    private TextView mDescription;
-    private CircleImageView mInstructorImage;
-    private TextView mInsructorName;
-
-    private RecyclerView mLikeRecyclerView;
-    private CourseLikeAdapter mLikeRecyclerAdapter;
-    private TextView mViewers;
-    private TextView mLikes;
-
-    private RecyclerView mSkillsRecyclerView;
-    private SkillAdapter mSkillAdapter;
-
-    private RecyclerView mRelatedCoursesRecyclerView;
-    private RelatedCourseAdapter mRelatedCourseAdapter;
-
     private Course course;
-    private String instructorImage;
-    private HashMap<String, String> courseMetaList;
-    private ArrayList<CourseExercise> courseExerciseList;
-    private ArrayList<Skill> courseSkillList;
-    private ArrayList<Course> relatedCourses;
-    private boolean courseLikedbyThisUser;
-    private ArrayList<User> courseLikedByUsers;
 
     public CourseOverviewFragment() {
         // Required empty public constructor
@@ -75,42 +53,43 @@ public class CourseOverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragmentView = inflater.inflate(R.layout.fragment_course_overview, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_course_overview, container, false);
 
-        mDuration = fragmentView.findViewById(R.id.course_duration);
-        mLevel = fragmentView.findViewById(R.id.course_level);
-        mDescription = fragmentView.findViewById(R.id.course_description);
-        mInstructorImage = fragmentView.findViewById(R.id.course_instructor_image);
-        mInsructorName = fragmentView.findViewById(R.id.course_instructor);
+        TextView mDuration = fragmentView.findViewById(R.id.course_duration);
+        TextView mLevel = fragmentView.findViewById(R.id.course_level);
+        TextView mDescription = fragmentView.findViewById(R.id.course_description);
+        LinearLayout mCourseInstructorContainer = fragmentView.findViewById(R.id.course_instructor_container);
+        CircleImageView mInstructorImage = fragmentView.findViewById(R.id.course_instructor_image);
+        TextView mInsructorName = fragmentView.findViewById(R.id.course_instructor);
 
-        mLikeRecyclerView = fragmentView.findViewById(R.id.likes_recycler_view);
-        mViewers = fragmentView.findViewById(R.id.course_viewers);
-        mLikes = fragmentView.findViewById(R.id.course_likes);
+        RecyclerView mLikeRecyclerView = fragmentView.findViewById(R.id.likes_recycler_view);
+        TextView mViewers = fragmentView.findViewById(R.id.course_viewers);
+        TextView mLikes = fragmentView.findViewById(R.id.course_likes);
 
-        mSkillsRecyclerView = fragmentView.findViewById(R.id.course_skills);
-        mRelatedCoursesRecyclerView = fragmentView.findViewById(R.id.related_courses_recycler_view);
+        RecyclerView mSkillsRecyclerView = fragmentView.findViewById(R.id.course_skills);
+        RecyclerView mRelatedCoursesRecyclerView = fragmentView.findViewById(R.id.related_courses_recycler_view);
 
         context = getActivity();
 
         course = (Course) getArguments().getSerializable("course");
-        instructorImage = getArguments().getString("instructorImage");
-        courseLikedbyThisUser = getArguments().getBoolean("courseLikedbyThisUser");
+        String instructorImage = getArguments().getString("instructorImage");
+        boolean courseLikedbyThisUser = getArguments().getBoolean("courseLikedbyThisUser");
 
-        courseMetaList = (HashMap<String, String>) getArguments().getSerializable("courseMetaList");
-        courseExerciseList = (ArrayList<CourseExercise>) getArguments().getSerializable("courseExerciseList");
-        courseSkillList = (ArrayList<Skill>) getArguments().getSerializable("courseSkillList");
-        relatedCourses = (ArrayList<Course>) getArguments().getSerializable("relatedCourses");
-        courseLikedByUsers = (ArrayList<User>) getArguments().getSerializable("courseLikedByUsers");
+        HashMap<String, String> courseMetaList = (HashMap<String, String>) getArguments().getSerializable("courseMetaList");
+        ArrayList<CourseExercise> courseExerciseList = (ArrayList<CourseExercise>) getArguments().getSerializable("courseExerciseList");
+        ArrayList<Skill> courseSkillList = (ArrayList<Skill>) getArguments().getSerializable("courseSkillList");
+        ArrayList<Course> relatedCourses = (ArrayList<Course>) getArguments().getSerializable("relatedCourses");
+        ArrayList<User> courseLikedByUsers = (ArrayList<User>) getArguments().getSerializable("courseLikedByUsers");
 
-        mLikeRecyclerAdapter = new CourseLikeAdapter(context, courseLikedByUsers);
+        CourseLikeAdapter mLikeRecyclerAdapter = new CourseLikeAdapter(context, courseLikedByUsers);
         mLikeRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         mLikeRecyclerView.setAdapter(mLikeRecyclerAdapter);
 
-        mSkillAdapter = new SkillAdapter(context, courseSkillList, R.layout.cell_skill, "", fragmentView);
+        SkillAdapter mSkillAdapter = new SkillAdapter(context, courseSkillList, R.layout.cell_skill, "", fragmentView);
         mSkillsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mSkillsRecyclerView.setAdapter(mSkillAdapter);
 
-        mRelatedCourseAdapter = new RelatedCourseAdapter(context, relatedCourses);
+        RelatedCourseAdapter mRelatedCourseAdapter = new RelatedCourseAdapter(context, relatedCourses);
         mRelatedCoursesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRelatedCoursesRecyclerView.setAdapter(mRelatedCourseAdapter);
 
@@ -120,6 +99,15 @@ public class CourseOverviewFragment extends Fragment {
         mLevel.setText(courseMetaList.get("level"));
         mDescription.setText(courseMetaList.get("description"));
         mInsructorName.setText(course.getInstructor());
+
+        mCourseInstructorContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra("userID", course.getInstructorID());
+                context.startActivity(intent);
+            }
+        });
 
         mViewers.setText(context.getResources().getString(R.string.course_screen_viewers, course.getViewers()));
         mLikes.setText(context.getResources().getString(R.string.course_screen_likes, course.getLikes()));

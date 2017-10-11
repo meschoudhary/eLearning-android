@@ -150,7 +150,7 @@
     <string name="quiz_drag_text">Hold and drag the answer here</string>
 
     <string name="all_question_answered_view_textview_1">All Done!</string>
-    <string name="all_question_answered_view_textview_2">You\'ve have completed the quiz</string>
+    <string name="all_question_answered_view_textview_2">You\'ve completed the quiz</string>
     <string name="all_question_answered_view_textview_3">You can check your score after you complete the course in your learning history</string>
 
 

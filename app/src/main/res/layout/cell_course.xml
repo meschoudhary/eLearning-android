@@ -78,7 +78,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/_12sdp"
                 android:fontFamily="@string/font_family_medium"
-                android:layout_toEndOf="@id/by"/>
+                android:layout_toEndOf="@id/by"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"/>
 
             <TextView
                 android:id="@+id/instructor_id"

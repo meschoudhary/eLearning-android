@@ -8,9 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +23,12 @@ import android.widget.ProgressBar;
 import com.google.gson.JsonObject;
 import com.salam.elearning.Adapters.CourseAdapter;
 import com.salam.elearning.LoginActivity;
+import com.salam.elearning.MainActivity;
 import com.salam.elearning.Models.Course;
 import com.salam.elearning.Models.User;
 import com.salam.elearning.R;
 import com.salam.elearning.SignUpActivity;
+import com.salam.elearning.Utils.EndlessRecyclerViewScrollListener;
 import com.salam.elearning.Utils.NetworkConnection;
 import com.salam.elearning.Utils.NetworkUtils;
 import com.salam.elearning.Utils.Utils;
@@ -37,10 +43,12 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
+    private static String TAG = "HomeFragment";
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private CourseAdapter courseRecylcerAdpter;
-    private ArrayList<Course> allCourses;
+    private ArrayList<Course> allCourses = new ArrayList<Course>();
 
     private ProgressBar mProgressBar;
     private String userID;
@@ -49,6 +57,8 @@ public class HomeFragment extends Fragment {
 
     private View rootView;
     private Context context;
+
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -62,22 +72,38 @@ public class HomeFragment extends Fragment {
         mProgressBar = rootView.findViewById(R.id.progress_bar);
 
         context = getActivity();
+
+        List<User> users = User.getLoggedInUser();
+        userID = users.get(0).getServerId();
+
         allCourses = new ArrayList<Course>();
         RecyclerView courseRecyclerView = rootView.findViewById(R.id.all_courses);
-        courseRecylcerAdpter = new CourseAdapter(getActivity() , allCourses, R.layout.cell_course);
-        courseRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        courseRecylcerAdpter = new CourseAdapter(getActivity() , allCourses, userID, R.layout.cell_course, rootView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        courseRecyclerView.setLayoutManager(linearLayoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                refreshItems();
+            }
+        };
+
+        courseRecyclerView.addOnScrollListener(scrollListener);
+
         courseRecyclerView.setAdapter(courseRecylcerAdpter);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Refresh items
+                allCourses = new ArrayList<Course>();
                 refreshItems();
             }
         });
 
-        List<User> users = User.getLoggedInUser();
-        userID = users.get(0).getServerId();
         new GetCourses(userID).execute();
 
         return rootView;
@@ -122,7 +148,7 @@ public class HomeFragment extends Fragment {
                 params.put("offset", String.valueOf(offset));
 
                 NetworkConnection networkConnection = new NetworkConnection();
-                String loginApi = "http://104.131.71.64/admin/api/getcourses";
+                String loginApi = context.getString(R.string.api_get_all_courses);
                 response = networkConnection.performPostCall(loginApi, params);
             } else {
                 Utils.showSnackBar(rootView, "You need to have an active internet connection", Snackbar.LENGTH_SHORT);
@@ -136,9 +162,8 @@ public class HomeFragment extends Fragment {
 
             if(!response.isEmpty()) {
 
-                allCourses = new ArrayList<Course>();
-
                 try {
+                    Log.d(TAG, response);
                     JSONObject jsonObject = new JSONObject(response);
 
                     String status = jsonObject.getString("status");
@@ -175,8 +200,8 @@ public class HomeFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 courseRecylcerAdpter.refreshAdapter(allCourses);
+                scrollListener.resetState();
             }else{
                 Utils.showSnackBar(rootView, "Some error occurred. Please try again.", Snackbar.LENGTH_SHORT);
             }

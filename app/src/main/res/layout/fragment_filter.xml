@@ -1,0 +1,224 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:padding="@dimen/_10sdp"
+    tools:context="com.salam.elearning.Fragments.FilterFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_level"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@string/font_family_regular"/>
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/filter_level_option_1"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_level_option_1"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_level_option_2"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_level_option_2"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_level_option_3"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_level_option_3"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_level_option_4"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_level_option_4"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_type"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@string/font_family_regular"
+        android:layout_marginTop="@dimen/_20sdp"/>
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/filter_type_option_1"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_type_option_1"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_type_option_2"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_type_option_2"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_type_option_3"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_type_option_3"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_duration"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@string/font_family_regular"
+        android:layout_marginTop="@dimen/_20sdp"/>
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/filter_duration_option_1"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_duration_option_1"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_duration_option_2"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_duration_option_2"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_duration_option_3"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_duration_option_3"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_duration_option_4"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_duration_option_4"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_duration_option_5"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_duration_option_5"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_duration_option_6"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_duration_option_6"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+            <Button
+                android:id="@+id/filter_duration_option_7"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:text="@string/filter_duration_option_7"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:background="@color/colorBackgroundGrey"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</LinearLayout>

@@ -1,14 +1,29 @@
 package com.salam.elearning.Models;
 
 import com.orm.SugarRecord;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class User extends SugarRecord {
+public class User extends SugarRecord implements Serializable {
 
     private String serverId;
     private String username;
     private String email;
     private String loggedIn;
+    private String image;
+    private String designation;
+    private String company;
+
+    public String getPasswordChanged() {
+        return passwordChanged;
+    }
+
+    public void setPasswordChanged(String passwordChanged) {
+        this.passwordChanged = passwordChanged;
+    }
+
+    private String passwordChanged;
 
     public User(){
 
@@ -61,5 +76,32 @@ public class User extends SugarRecord {
         return User.find(User.class, "server_id = ?", id);
     }
 
+    public static List<User> findByEmail(String email){
+        return User.find(User.class, "email = ?", email);
+    }
 
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
 }

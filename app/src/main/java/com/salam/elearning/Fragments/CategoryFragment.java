@@ -1,98 +1,155 @@
 package com.salam.elearning.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.salam.elearning.Adapters.CategoryAdapter;
+import com.salam.elearning.LoginActivity;
+import com.salam.elearning.MainActivity;
+import com.salam.elearning.Models.Category;
+import com.salam.elearning.Models.SubCategory;
+import com.salam.elearning.Models.User;
 import com.salam.elearning.R;
+import com.salam.elearning.Utils.NetworkConnection;
+import com.salam.elearning.Utils.Utils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CategoryFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CategoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class CategoryFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private String TAG = "CategoryFragment";
+    private View fragmentView;
+
+    private RecyclerView recyclerView;
+    private CategoryAdapter adapter;
+
+    private Context context;
+
+    private ArrayList<Category> categories;
+    private ArrayList<SubCategory> subCategories;
 
     public CategoryFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CategoryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CategoryFragment newInstance(String param1, String param2) {
-        CategoryFragment fragment = new CategoryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category, container, false);
+
+        fragmentView = inflater.inflate(R.layout.fragment_category, container, false);
+
+        context = getActivity();
+
+        categories = new ArrayList<>();
+        subCategories = new ArrayList<>();
+
+        recyclerView = fragmentView.findViewById(R.id.category_sub_category_recyclerview);
+
+        new GetCategory().execute();
+
+        return fragmentView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private class GetCategory extends AsyncTask<Void, Void, String> {
+
+        GetCategory() {}
+
+        @Override
+        protected String doInBackground(Void ... voids) {
+
+            String response = "";
+
+            HashMap<String, String> params = new HashMap<>();
+
+            String csrfKey = "FASMBQWIFJDAJ28915734BBKBK8945CTIRETE354PA67";
+            params.put("apiCsrfKey", csrfKey);
+
+            NetworkConnection networkConnection = new NetworkConnection();
+            String getCategorydApi = context.getString(R.string.api_get_category);
+            response = networkConnection.performPostCall(getCategorydApi, params);
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+
+            if(!response.isEmpty()){
+
+                try {
+
+                    Log.d(TAG, response);
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String status = jsonObject.getString("status");
+                    String error = jsonObject.getString("error");
+
+                    if (status.equalsIgnoreCase("200") && error.isEmpty()) {
+
+                        JSONArray data = jsonObject.getJSONArray("response");
+
+                        categories = new ArrayList<>();
+                        for (int i = 0; i < data.length(); i++){
+
+                            JSONObject category = data.getJSONObject(i);
+
+                            JSONArray subCategoryAll = category.getJSONArray("subcategory");
+
+                            for (int j = 0; j< subCategoryAll.length(); j++){
+
+                                JSONObject subCategory = subCategoryAll.getJSONObject(j);
+
+                                subCategories.add(new SubCategory(subCategory.getString("id"), subCategory.getString("name")));
+                            }
+
+                            categories.add(new Category(category.getString("id"), category.getString("name"), subCategories));
+                            subCategories = new ArrayList<>();
+                        }
+
+                        adapter = new CategoryAdapter(context, categories);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(adapter);
+
+                        Log.d(TAG, String.valueOf(categories));
+
+                    } else {
+
+                        Utils.showSnackBar(fragmentView, error, Snackbar.LENGTH_SHORT);
+
+                    }
+
+                }catch (Exception e){
+
+                    e.printStackTrace();
+                    Utils.showSnackBar(fragmentView, e.getMessage(), Snackbar.LENGTH_SHORT);
+
+                }
+
+            }else{
+                Utils.showSnackBar(fragmentView, "Some error occurred. Please try again.", Snackbar.LENGTH_SHORT);
+            }
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

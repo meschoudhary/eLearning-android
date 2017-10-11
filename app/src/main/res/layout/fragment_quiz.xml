@@ -1,0 +1,324 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/answer_container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.salam.elearning.Fragments.QuizFragment"
+    android:background="@color/colorWhite">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/question_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="14sp"
+            android:fontFamily="@string/font_family_light"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="@dimen/_5sdp"/>
+
+        <TextView
+            android:id="@+id/drag_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="@string/quiz_drag_text"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:fontFamily="@string/font_family_light"/>
+
+        <!--The view where the answer is dropped-->
+        <RelativeLayout
+            android:id="@+id/answer_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:visibility="visible">
+
+        </RelativeLayout>
+
+        <!--The view which is shown when the answer given is correct-->
+        <LinearLayout
+            android:id="@+id/correct_answer_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quiz_wrong_answer_correct_textview_1"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"
+                android:fontFamily="@string/font_family_light"/>
+
+            <TextView
+                android:id="@+id/correct_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:drawableLeft="@drawable/check"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_regular"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/all_questions_answered_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:text="@string/quiz_summary"
+                    android:textColor="@color/colorWhite"
+                    android:background="@color/colorAccent"
+                    android:visibility="gone"
+                    android:layout_alignParentBottom="true"
+                    android:fontFamily="@string/font_family_light"/>
+
+                <Button
+                    android:id="@+id/next_question_correct"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:background="@color/colorAccent"
+                    android:text="@string/quiz_wrong_answer_button_nextquestion"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_alignParentBottom="true"
+                    android:fontFamily="@string/font_family_light"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!--The view which is shown when the answer given is wrong-->
+        <LinearLayout
+            android:id="@+id/wrong_answer_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quiz_wrong_answer_textview_1"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_medium"
+                android:layout_marginTop="@dimen/_15sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quiz_wrong_answer_textview_2"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_light"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_15sdp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorBackgroundGrey"
+                android:padding="@dimen/_2sdp">
+
+                <ImageView
+                    android:id="@+id/wrong_answer_chapter_image"
+                    android:layout_width="@dimen/_130sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/user_background"
+                    android:scaleType="fitXY"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/wrong_answer_chapter_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/wrong_answer_chapter_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        android:layout_gravity="bottom"
+                        android:layout_alignParentBottom="true"
+                        android:fontFamily="@string/font_family_thin"
+                        android:layout_marginBottom="@dimen/_10sdp"/>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/all_wrong_questions_answered_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:text="@string/quiz_summary"
+                    android:textColor="@color/colorWhite"
+                    android:background="@color/colorAccent"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:visibility="gone"
+                    android:fontFamily="@string/font_family_light"
+                    android:layout_alignParentBottom="true"/>
+
+                <Button
+                    android:id="@+id/next_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:background="@color/colorAccent"
+                    android:text="@string/quiz_wrong_answer_button_nextquestion"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@string/font_family_light"
+                    android:layout_alignParentBottom="true"/>
+
+                <Button
+                    android:id="@+id/try_again"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:background="@drawable/button_with_border"
+                    android:text="@string/quiz_wrong_answer_textview_1"
+                    android:layout_above="@id/next_question"
+                    android:fontFamily="@string/font_family_light"
+                    android:textColor="@color/colorAccent"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recycler_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/answerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <!--The view which is shown when the all the questions have been answered-->
+    <LinearLayout
+        android:id="@+id/all_questions_answered_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_question_answered_view_textview_1"
+            android:textSize="19sp"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="@string/font_family_light"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_question_answered_view_textview_2"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:fontFamily="@string/font_family_light"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/quiz_complete"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_question_answered_view_textview_3"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:fontFamily="@string/font_family_light"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:paddingStart="@dimen/_20sdp"
+            android:paddingEnd="@dimen/_20sdp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/all_questions_answered_view_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:background="@color/colorAccent"
+                android:text="@string/all_question_answered"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                android:layout_margin="@dimen/_20sdp"
+                android:layout_alignParentBottom="true"
+                android:fontFamily="@string/font_family_light"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/quiz_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
+
+    </RelativeLayout>
+
+</RelativeLayout>

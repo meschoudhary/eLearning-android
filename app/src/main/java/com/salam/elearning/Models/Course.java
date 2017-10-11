@@ -2,7 +2,10 @@ package com.salam.elearning.Models;
 
 import com.orm.SugarRecord;
 
-public class Course extends SugarRecord{
+import java.io.Serializable;
+import java.util.List;
+
+public class Course extends SugarRecord implements Serializable{
 
     private String title;
     private String imagePath;
@@ -12,8 +15,16 @@ public class Course extends SugarRecord{
     private String viewers;
     private String save;
     private String instructorID;
+    private String likes;
+    private String duration;
+    private String type;
+    private String score;
 
     public Course() {
+    }
+    public Course(String title, String serverId){
+        this.title = title;
+        this.serverId = serverId;
     }
 
     public Course(String title, String imagePath, String instructor, String serverId, String skill, String viewers, String save, String instructorID) {
@@ -89,5 +100,41 @@ public class Course extends SugarRecord{
 
     public void setSave(String save) {
         this.save = save;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public static List<Course> findByTitle(String title){
+        return Course.find(Course.class, "title = ?", title);
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
     }
 }

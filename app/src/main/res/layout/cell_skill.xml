@@ -11,16 +11,17 @@
         android:layout_width="@dimen/_200sdp"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@color/black"
-        android:fontFamily="@string/font_family_thin"/>
+        android:layout_centerVertical="true"
+        android:fontFamily="@string/font_family_condensed" />
 
-    <ImageView
-        android:id="@+id/student_delete_skill"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/delete"
-        android:contentDescription="@string/app_name"/>
+    <View
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@id/student_skill"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/colorGrey"/>
 
 </RelativeLayout>

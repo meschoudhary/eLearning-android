@@ -7,7 +7,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.salam.elearning.Adapters.CourseAdapter;
+import com.salam.elearning.Adapters.PublicationAdapter;
+import com.salam.elearning.Adapters.TopicsAdapter;
 import com.salam.elearning.Models.Course;
 import com.salam.elearning.Models.User;
 import com.salam.elearning.Utils.NetworkConnection;
@@ -42,32 +47,29 @@ public class ProfileActivity extends AppCompatActivity{
 
     private static final String TAG = "Profile";
 
-    private String userID;
-
     private Context context;
     private View view;
 
-    private Toolbar toolbar;
-    private TextView toolbarTitle;
-    private CircleImageView toolbarImage;
-    private ImageView toolbarBack;
-
     private User user;
+
+    private CollapsingToolbarLayout collapsingToolbar;
 
     private CircleImageView mPorfileImage;
     private TextView mProfileUsername;
     private TextView mProfileDesignationCompany;
     private TextView mProfileDescription;
 
+    private ArrayList<String> allTopics;
+    private TextView mAllTopicsByThisUser;
+    private TopicsAdapter mTopicsAdapter;
+
     private ArrayList<Course> allCourses;
     private TextView mAllCoursesByThisUser;
-    private RecyclerView mProfileCourses;
     private CourseAdapter mCourseRecylcerAdpter;
 
     private ArrayList<String> allPublications;
     private TextView mAllPublicationsByThisUser;
-    private ArrayAdapter<String> publicationsAdapter;
-    private ListView mProfilePublications;
+    private PublicationAdapter mPublicationsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,40 +78,59 @@ public class ProfileActivity extends AppCompatActivity{
 
         allCourses = new ArrayList<>();
         allPublications = new ArrayList<>();
+        allTopics = new ArrayList<>();
 
-        userID = getIntent().getStringExtra("userID");
+        String userID = getIntent().getStringExtra("userID");
 
         context = this;
         view = (((Activity) context).findViewById(R.id.profile_activity));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbarTitle = toolbar.findViewById(R.id.profile_username_toolbar);
-        toolbarBack = toolbar.findViewById(R.id.profile_back);
-        toolbarImage = toolbar.findViewById(R.id.toolbar_profile);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
-        toolbarBack.setOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 onBackPressed();
             }
         });
+
+        collapsingToolbar = findViewById(R.id.toolbar_layout);
+
+        collapsingToolbar.setExpandedTitleTextAppearance(R.style.expandedappbar);
+        collapsingToolbar.setContentScrimColor(ContextCompat.getColor(this, R.color.colorAccent));
+        collapsingToolbar.setStatusBarScrimColor(ContextCompat.getColor(this, R.color.colorAccent));
 
         mPorfileImage = findViewById(R.id.profile_instructor_image);
         mProfileUsername = findViewById(R.id.profile_username);
         mProfileDesignationCompany = findViewById(R.id.profile_designation_company);
         mProfileDescription = findViewById(R.id.profile_description);
 
+        mAllTopicsByThisUser = findViewById(R.id.all_topics_by_this_user);
+        mTopicsAdapter = new TopicsAdapter(this, allTopics);
+        RecyclerView mTopicsRecyclerView = findViewById(R.id.profile_topics_view);
+        mTopicsRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        mTopicsRecyclerView.setAdapter(mTopicsAdapter);
+        mTopicsRecyclerView.setNestedScrollingEnabled(false);
+
         mAllCoursesByThisUser = findViewById(R.id.all_courses_by_this_user);
-        mProfileCourses = findViewById(R.id.profile_courses_recycler_view);
-        mCourseRecylcerAdpter = new CourseAdapter(context , allCourses, R.layout.cell_saved_course);
+        RecyclerView mProfileCourses = findViewById(R.id.profile_courses_recycler_view);
+        mCourseRecylcerAdpter = new CourseAdapter(context , allCourses, userID, R.layout.cell_saved_course, findViewById(android.R.id.content) );
         mProfileCourses.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         mProfileCourses.setAdapter(mCourseRecylcerAdpter);
         mProfileCourses.setNestedScrollingEnabled(false);
 
         mAllPublicationsByThisUser = findViewById(R.id.all_publications_by_this_user);
-        mProfilePublications = findViewById(R.id.profile_publication_view);
-        publicationsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, allPublications);
-        mProfilePublications.setAdapter(publicationsAdapter);
+        mPublicationsAdapter = new PublicationAdapter(this, allPublications);
+        RecyclerView mPublicationRecyclerView = findViewById(R.id.profile_publication_view);
+        mPublicationRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        mPublicationRecyclerView.setAdapter(mPublicationsAdapter);
+        mPublicationRecyclerView.setNestedScrollingEnabled(false);
         new GetProfile(userID).execute();
     }
 
@@ -134,7 +155,7 @@ public class ProfileActivity extends AppCompatActivity{
             params.put("type", "1");
 
             NetworkConnection networkConnection = new NetworkConnection();
-            String loginApi = "http://104.131.71.64/admin/api/getuser";
+            String loginApi = getString(R.string.api_get_user);
             response = networkConnection.performPostCall(loginApi, params);
 
             return response;
@@ -162,6 +183,7 @@ public class ProfileActivity extends AppCompatActivity{
 
                         JSONArray courses = data.getJSONArray("courses");
                         JSONArray publications = data.getJSONArray("publications");
+                        JSONArray topics = data.getJSONArray("topics");
                         JSONObject user = data.getJSONObject("user");
 
 
@@ -185,6 +207,10 @@ public class ProfileActivity extends AppCompatActivity{
                             mAllPublicationsByThisUser.setText(context.getString(R.string.profile_publications, username));
                         }
 
+                        if(topics.length() > 0){
+                            mAllTopicsByThisUser.setText(context.getString(R.string.profile_topics, username));
+                        }
+
                         if(!designation.isEmpty() && !company.isEmpty())
                             designationCompany = designation + " at " + company;
 
@@ -194,12 +220,7 @@ public class ProfileActivity extends AppCompatActivity{
                         else if(!designation.isEmpty() && company.isEmpty())
                             designationCompany = designation;
 
-                        toolbarTitle.setText(username);
-                        Picasso.with(context)
-                                .load(Uri.parse(imageHost + user.getString("profile_pic")))
-                                .placeholder(R.drawable.cover_placeholder)
-                                .error(R.drawable.cover_error)
-                                .into(toolbarImage);
+                        collapsingToolbar.setTitle(username);
 
                         mProfileUsername.setText(username);
                         mProfileDesignationCompany.setText(designationCompany);
@@ -221,14 +242,21 @@ public class ProfileActivity extends AppCompatActivity{
                         }
 
                         for (int i = 0; i < publications.length(); i++){
-                            String publication_name = (String) publications.get(0);
+                            String publicationName = publications.getString(i);
 
-                            allPublications.add(publication_name);
+                            allPublications.add(publicationName);
+                        }
+
+                        for (int i = 0; i < topics.length(); i++){
+                            String topicName = topics.getString(i);
+
+                            allTopics.add(topicName);
                         }
 
                         mCourseRecylcerAdpter.refreshAdapter(allCourses);
-                        publicationsAdapter.notifyDataSetChanged();
-                        Utils.setListViewHeightBasedOnItems(mProfilePublications);
+                        mTopicsAdapter.refreshAdapter(allTopics);
+                        mPublicationsAdapter.refreshAdapter(allPublications);
+                        //Utils.setListViewHeightBasedOnItems(mPublicationsAdapter);
 
                     } else {
 

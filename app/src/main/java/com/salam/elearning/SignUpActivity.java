@@ -160,7 +160,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             String response = "";
             if (NetworkUtils.isWifiConnected(context) || NetworkUtils.isMobileConnected(context)) {
                 String csrfKey = "FASMBQWIFJDAJ28915734BBKBK8945CTIRETE354PA67";
-                String getAllSkillsApi = "http://104.131.71.64/admin/api/getskills";
+                String getAllSkillsApi = getString(R.string.api_get_skills);
 
                 HashMap<String, String> params = new HashMap<>();
                 params.put("apiCsrfKey", csrfKey);
@@ -223,6 +223,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mPassword.requestFocus();
             mPassword.setError("Password cannot be empty");
             return false;
+        }else if(password.length() < 6){
+            mPassword.requestFocus();
+            mPassword.setError("Password must be atleast 6 characters");
+            return false;
         }
 
         if(spinner.length() <= 0){
@@ -282,7 +286,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             params.put("skills", String.valueOf(new JSONArray(allSelectedSkills)));
 
             NetworkConnection networkConnection = new NetworkConnection();
-            String loginApi = "http://104.131.71.64/admin/api/signup";
+            String loginApi = getString(R.string.api_signup);
             response = networkConnection.performPostCall(loginApi, params);
 
             return response;

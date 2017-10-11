@@ -1,5 +1,6 @@
 package com.salam.elearning.Adapters;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,10 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.salam.elearning.Fragments.StudentFragment;
+import com.salam.elearning.MainActivity;
 import com.salam.elearning.Models.Course;
 import com.salam.elearning.Models.Skill;
 import com.salam.elearning.ProfileActivity;
 import com.salam.elearning.R;
+import com.salam.elearning.SearchActivity;
 import com.salam.elearning.Utils.NetworkConnection;
 import com.salam.elearning.Utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -117,8 +120,10 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.Holder> {
         holder.mStudentSkillCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "You want to view skill " + skill.getName() + "with id " + skill.getServerId(), Toast.LENGTH_SHORT)
-                        .show();
+                Intent intent = new Intent(context, SearchActivity.class);
+                intent.setAction(Intent.ACTION_SEARCH);
+                intent.putExtra(SearchManager.QUERY, skill.getName());
+                context.startActivity(intent);
             }
         });
     }
@@ -177,7 +182,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.Holder> {
             params.put("skillID", skillID);
 
             NetworkConnection networkConnection = new NetworkConnection();
-            String loginApi = "http://104.131.71.64/admin/api/deleteskill";
+            String loginApi = context.getString(R.string.api_delete_skill);
             response = networkConnection.performPostCall(loginApi, params);
 
             return response;
@@ -246,7 +251,7 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.Holder> {
             params.put("skillID", skillID);
 
             NetworkConnection networkConnection = new NetworkConnection();
-            String loginApi = "http://104.131.71.64/admin/api/addskill";
+            String loginApi = context.getString(R.string.api_add_skill);
             response = networkConnection.performPostCall(loginApi, params);
 
             return response;

@@ -125,7 +125,7 @@ public class AddSkillFragment extends Fragment implements SearchView.OnQueryText
                 Log.d(TAG, "sending request");
 
                 NetworkConnection networkConnection = new NetworkConnection();
-                String loginApi = "http://104.131.71.64/admin/api/getallskills";
+                String loginApi = context.getString(R.string.api_get_all_skills);
                 response = networkConnection.performPostCall(loginApi, params);
                 Log.d("response", response);
             } else {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/collection_courses_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_marginEnd="@dimen/_10sdp"
+    android:background="@color/colorWhite">
+
+    <ImageView
+        android:id="@+id/collection_course_image_1"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/cover_placeholder"
+        android:scaleType="fitXY"
+        android:background="@color/colorBackgroundGrey"/>
+
+    <ImageView
+        android:id="@+id/collection_course_image_2"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_toEndOf="@id/collection_course_image_1"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/cover_placeholder"
+        android:scaleType="fitXY"
+        android:background="@color/colorBackgroundGrey"/>
+
+    <ImageView
+        android:id="@+id/collection_course_image_3"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_below="@id/collection_course_image_1"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/cover_placeholder"
+        android:scaleType="fitXY"
+        android:background="@color/colorBackgroundGrey"/>
+
+    <ImageView
+        android:id="@+id/collection_course_image_4"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_toEndOf="@id/collection_course_image_3"
+        android:layout_below="@id/collection_course_image_2"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/cover_placeholder"
+        android:scaleType="fitXY"
+        android:background="@color/colorBackgroundGrey"/>
+
+    <TextView
+        android:id="@+id/collection_courses_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 item"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@string/font_family_condensed"
+        android:layout_below="@id/collection_course_image_3"/>
+
+    <TextView
+        android:id="@+id/collection_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Testing"
+        android:textSize="17sp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@string/font_family_regular"
+        android:layout_below="@id/collection_courses_count"/>
+
+</RelativeLayout>

@@ -1,0 +1,208 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.salam.elearning.Fragments.CourseOverviewFragment">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/course_info_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:padding="@dimen/_10sdp"
+                android:background="@color/colorWhite">
+
+                <TextView
+                    android:id="@+id/course_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_light"/>
+
+                <TextView
+                    android:id="@+id/course_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/course_duration"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_light"/>
+
+                <TextView
+                    android:id="@+id/course_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/course_duration"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_light"/>
+
+                <View
+                    android:id="@+id/separator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/course_description"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@color/colorGrey"/>
+
+                <TextView
+                    android:id="@+id/instructor_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/course_screen_instructor"
+                    android:textSize="16sp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_below="@id/separator"
+                    android:textColor="@color/black" />
+
+                <LinearLayout
+                    android:id="@+id/course_instructor_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/instructor_holder"
+                    android:layout_marginTop="@dimen/_10sdp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/course_instructor_image"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/default_user" />
+
+                    <TextView
+                        android:id="@+id/course_instructor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@string/font_family_light"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/course_like_data_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/course_info_container"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/_10sdp"
+                android:elevation="5dp"
+                android:layout_marginTop="@dimen/_15sdp">
+
+                <TextView
+                    android:id="@+id/course_likes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:textSize="16sp"
+                    android:fontFamily="@string/font_family_light"
+                    android:textColor="@color/black"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/likes_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_below="@id/course_likes">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <View
+                    android:id="@+id/separator_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/likes_recycler_view"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/colorGrey"/>
+
+                <TextView
+                    android:id="@+id/course_viewers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/separator_2"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:textSize="16sp"
+                    android:fontFamily="@string/font_family_light"
+                    android:textColor="@color/black"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/course_skill_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:elevation="5dp"
+                android:layout_below="@id/course_like_data_container">
+
+                <TextView
+                    android:id="@+id/course_skill_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/course_screen_skill_heading"
+                    android:textSize="16sp"
+                    android:fontFamily="@string/font_family_light"
+                    android:textColor="@color/black"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/course_skills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/course_skill_heading"
+                    android:layout_marginTop="@dimen/_10sdp">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/related_courses_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:elevation="5dp"
+                android:layout_below="@id/course_skill_container">
+
+                <TextView
+                    android:id="@+id/related_courses_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/course_screen_related_courses_heading"
+                    android:textSize="16sp"
+                    android:fontFamily="@string/font_family_light"
+                    android:textColor="@color/black"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/related_courses_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_below="@id/related_courses_heading">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</FrameLayout>

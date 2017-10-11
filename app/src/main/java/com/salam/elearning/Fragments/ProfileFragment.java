@@ -8,6 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.salam.elearning.Adapters.CourseAdapter;
+import com.salam.elearning.Adapters.UserLearningHistoryAdapter;
+import com.salam.elearning.MainActivity;
+import com.salam.elearning.Models.Collection;
 import com.salam.elearning.Models.Course;
 import com.salam.elearning.Models.User;
 import com.salam.elearning.R;
@@ -43,6 +47,8 @@ public class ProfileFragment extends Fragment {
     private View fragmentView;
     private Context context;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private RelativeLayout mProfileScreenHeadingView;
     private CircleImageView mProfilePic;
     private TextView mUsername;
@@ -50,11 +56,17 @@ public class ProfileFragment extends Fragment {
 
     private ProgressBar mProgressBar;
 
-    private CourseAdapter courseRecylcerAdpter;
+    private UserLearningHistoryAdapter userLearningHistoryAdapter;
     private ArrayList<Course> savedCourses;
     private ArrayList<Course> historyCourses;
 
+    private ArrayList<Collection> collections;
+
+    private HashMap<String, ArrayList<Course>> collectionCourses;
+
     private ArrayList<Object> allData = new ArrayList<>();
+
+    private String userID = "";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -67,6 +79,8 @@ public class ProfileFragment extends Fragment {
 
         context = getActivity();
 
+        mSwipeRefreshLayout = fragmentView.findViewById(R.id.swipeRefreshLayout);
+
         mProfileScreenHeadingView = fragmentView.findViewById(R.id.profile_screen_heading_view);
         mProfilePic = fragmentView.findViewById(R.id.profile_profile_image);
         mUsername = fragmentView.findViewById(R.id.username);
@@ -75,6 +89,7 @@ public class ProfileFragment extends Fragment {
         mProgressBar = fragmentView.findViewById(R.id.progress_bar);
 
         final List<User> user = User.getLoggedInUser();
+        userID = user.get(0).getServerId();
 
         mUsername.setText(user.get(0).getUsername());
 
@@ -95,17 +110,45 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        savedCourses = new ArrayList<Course>();
-        RecyclerView mCourseRecyclerView = fragmentView.findViewById(R.id.saved_courses_reycler_view);
-        courseRecylcerAdpter = new CourseAdapter(getActivity() , savedCourses, R.layout.cell_saved_course);
-        mCourseRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mCourseRecyclerView.setAdapter(courseRecylcerAdpter);
+        RecyclerView mUserLearningRecyclerView = fragmentView.findViewById(R.id.user_learning_recycler_view);
+        userLearningHistoryAdapter = new UserLearningHistoryAdapter(getActivity() , allData, collectionCourses,  userID, fragmentView);
+        mUserLearningRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mUserLearningRecyclerView.setAdapter(userLearningHistoryAdapter);
 
+        savedCourses = new ArrayList<Course>();
         historyCourses = new ArrayList<>();
+        collections = new ArrayList<>();
+
+        collectionCourses = new HashMap<>();
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
 
         new GetUserData(user.get(0).getServerId()).execute();
 
         return fragmentView;
+    }
+
+    private void refreshItems() {
+
+        // Load items
+
+        savedCourses = new ArrayList<Course>();
+        collections = new ArrayList<>();
+        historyCourses = new ArrayList<>();
+
+        allData = new ArrayList<>();
+        collectionCourses = new HashMap<>();
+
+        new GetUserData(userID).execute();
+
+        // Load complete
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private class GetUserData extends AsyncTask<Void, Void, String> {
@@ -137,7 +180,7 @@ public class ProfileFragment extends Fragment {
                 Log.d(TAG, "sending request");
 
                 NetworkConnection networkConnection = new NetworkConnection();
-                String loginApi = "http://104.131.71.64/admin/api/getuserdata";
+                String loginApi = context.getString(R.string.api_get_user_data);
                 response = networkConnection.performPostCall(loginApi, params);
                 Log.d(TAG, "get response");
                 Log.d("response", response);
@@ -152,8 +195,6 @@ public class ProfileFragment extends Fragment {
         protected void onPostExecute(String response) {
 
             if(!response.isEmpty()) {
-
-
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -162,6 +203,7 @@ public class ProfileFragment extends Fragment {
 
                     String imageHost = "http://104.131.71.64";
                     if (status.equalsIgnoreCase("200") && error.isEmpty()) {
+
                         Log.d(TAG, response);
                         JSONObject responseData = jsonObject.getJSONObject("response");
 
@@ -182,6 +224,7 @@ public class ProfileFragment extends Fragment {
 
                         JSONArray courses = responseData.getJSONArray("saved");
                         JSONArray history = responseData.getJSONArray("history");
+                        JSONArray collection = responseData.getJSONArray("collection");
 
                         for (int i = 0; i < courses.length(); i++){
 
@@ -202,7 +245,7 @@ public class ProfileFragment extends Fragment {
 
                         for (int i = 0; i < history.length(); i++){
 
-                            JSONObject courseData = courses.getJSONObject(i);
+                            JSONObject courseData = history.getJSONObject(i);
 
                             String courseId = courseData.getString("course_id");
                             String courseTitle = courseData.getString("course_title");
@@ -212,10 +255,59 @@ public class ProfileFragment extends Fragment {
                             String courseSaved = courseData.getString("course_save");
                             String courseInstructorID = courseData.getString("course_instructor_id");
 
-                            historyCourses.add(new Course(courseTitle, courseImg, courseInstructor, courseId, "", courseViews, courseSaved, courseInstructorID));
+                            Course course = new Course(courseTitle, courseImg, courseInstructor, courseId, "", courseViews, courseSaved, courseInstructorID);
+
+                            if(courseData.getString("score").equalsIgnoreCase("0")){
+                                course.setScore("");
+                            }else{
+                                course.setScore(courseData.getString("score")  + "%");
+                            }
+
+                            historyCourses.add(course);
                         }
 
                         allData.add(historyCourses);
+
+                        /*
+                        now for adding collections
+                        collections = A basic arraylist with collection objects in it.
+                        collectionCourseList = A basic arraylist with all courses of a particular collection in it
+                        collectionCourses = A hashmap with collectionServerID as key and collectionCourseList as value.
+
+                        */
+                        for (int i = 0; i < collection.length(); i++){
+
+                            JSONObject courseData = collection.getJSONObject(i);
+
+                            String collectionTitle = courseData.getString("collection_name");
+                            String collectionDescription = courseData.getString("collection_description");
+                            String collectionId = courseData.getString("collection_id");
+
+                            JSONArray allCollectionData = courseData.getJSONArray("collection_data");
+
+                            ArrayList<Course> collectionCourseList = new ArrayList<>();
+                            for (int j = 0; j < allCollectionData.length(); j++){
+
+                                JSONObject collectionCourse = allCollectionData.getJSONObject(j);
+
+                                String courseId = collectionCourse.getString("course_id");
+                                String courseTitle = collectionCourse.getString("course_title");
+                                String courseImg = imageHost + collectionCourse.getString("course_img");
+                                String courseInstructor = collectionCourse.getString("course_instructor");
+                                String courseViews = collectionCourse.getString("course_viewers");
+                                String courseSaved = collectionCourse.getString("course_save");
+                                String courseInstructorID = collectionCourse.getString("course_instructor_id");
+
+                                collectionCourseList.add(new Course(courseTitle, courseImg, courseInstructor, courseId, "", courseViews, courseSaved, courseInstructorID));
+
+                            }
+
+                            collectionCourses.put(collectionId, collectionCourseList);
+
+                            collections.add(new Collection(collectionTitle, collectionDescription, userID, collectionId));
+                        }
+
+                        allData.add(collections);
 
                     } else {
                         Log.d(TAG, error);
@@ -227,7 +319,7 @@ public class ProfileFragment extends Fragment {
                     Utils.showSnackBar(fragmentView, e.getMessage(), Snackbar.LENGTH_SHORT);
                 }
 
-                courseRecylcerAdpter.refreshAdapter(savedCourses);
+                userLearningHistoryAdapter.refreshAdapter(allData, collectionCourses);
             }else{
                 Log.d(TAG, response);
                 Utils.showSnackBar(fragmentView, "Some error occurred. Please try again.", Snackbar.LENGTH_SHORT);

@@ -2,8 +2,10 @@ package com.salam.elearning.Models;
 
 import com.orm.SugarRecord;
 
+import java.io.Serializable;
 
-public class Skill extends SugarRecord {
+
+public class Skill extends SugarRecord implements Serializable {
 
     private  String serverId;
     private  String name;

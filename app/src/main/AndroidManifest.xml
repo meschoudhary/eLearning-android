@@ -15,12 +15,16 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name=".Utils.RecentSuggestionsProvider"
+            android:authorities="com.salam.elearning.Utils.RecentSuggestionsProvider" />
+
         <meta-data
             android:name="DATABASE"
-            android:value="salam_learning.db" />
+            android:value="salam_e_learning.db" />
         <meta-data
             android:name="VERSION"
-            android:value="11" />
+            android:value="41" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -28,16 +32,6 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.salam.elearning.Models" />
 
-        <activity
-            android:name=".MainActivity"/>
-            <!--android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"-->
-
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".SignUpActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -48,10 +42,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProfileActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-
+            android:name=".SignUpActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/ToolBarStyle">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
         </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity android:name=".CollectionActivity" />
+        <activity android:name=".ForgetPasswordActivity" />
+        <activity
+            android:name=".CourseActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/ToolBarStyle">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".CategoryViewActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".QuizActivity"></activity>
     </application>
 
 </manifest>

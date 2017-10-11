@@ -1,72 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/course_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="@dimen/_10sdp"
-    android:layout_marginEnd="@dimen/_10sdp">
+    android:layout_marginEnd="@dimen/_10sdp"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    >
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/course_cover"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_90sdp"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/app_name"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:src="@drawable/background_login" />
+
+    <TextView
+        android:id="@+id/course_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:orientation="vertical">
+        android:paddingTop="@dimen/_2sdp"
+        android:fontFamily="@string/font_family_light"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_13sdp"/>
 
-        <ImageView
-            android:id="@+id/course_cover"
-            android:layout_width="@dimen/_150sdp"
-            android:layout_height="@dimen/_90sdp"
-            android:scaleType="fitXY"
-            android:contentDescription="@string/app_name"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:src="@drawable/background_login" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp">
 
         <TextView
-            android:id="@+id/course_title"
+            android:id="@+id/by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_2sdp"
-            android:fontFamily="@string/font_family_light"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_13sdp"/>
+            android:textSize="@dimen/_12sdp"
+            android:fontFamily="@string/font_family_black" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/instructor_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp">
+            android:visibility="invisible"/>
 
-            <TextView
-                android:id="@+id/by"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_12sdp"
-                android:fontFamily="@string/font_family_black" />
+        <TextView
+            android:id="@+id/instructor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:fontFamily="@string/font_family_medium"
+            android:layout_toEndOf="@id/by"/>
 
-            <TextView
-                android:id="@+id/instructor_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"/>
+        <ImageView
+            android:id="@+id/course_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/app_name"
+            android:layout_centerVertical="true"
+            android:src="@drawable/save_course"/>
 
-            <TextView
-                android:id="@+id/instructor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_12sdp"
-                android:fontFamily="@string/font_family_medium"
-                android:layout_toEndOf="@id/by"/>
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/course_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:contentDescription="@string/app_name"
-                android:layout_centerVertical="true"
-                android:src="@drawable/save_course"/>
 
-        </RelativeLayout>
-
-    </LinearLayout>
 
 </LinearLayout>

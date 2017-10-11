@@ -22,8 +22,8 @@
             android:layout_height="96dp"
             android:src="@drawable/default_user"
             android:layout_gravity="center"
-            app:civ_border_width="2dp"
-            app:civ_border_color="#FF000000"/>
+            app:civ_border_width="3dp"
+            app:civ_border_color="@color/colorWhite"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
 
         <com.thomashaertel.widget.MultiSpinner
             android:id="@+id/skill"
-            android:layout_width="@dimen/_150sdp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/signup_hint_skill"
             android:hint="@string/signup_hint_skill"

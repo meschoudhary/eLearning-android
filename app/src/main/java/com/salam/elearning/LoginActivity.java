@@ -3,19 +3,13 @@ package com.salam.elearning;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -49,8 +43,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private View view;
 
     private String forgotPasswordApi = "";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +84,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     break;
 
                 case R.id.forgot_password:
+
+                    Intent i = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                    startActivity(i);
                     break;
 
                 case R.id.sign_up:
@@ -156,48 +151,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     if (status.equalsIgnoreCase("200") && error.isEmpty()) {
 
-                        Gson gson = new Gson();
-                        final User user = gson.fromJson(String.valueOf(jsonObject.getJSONObject("response")), User.class);
-                        List<User> users = User.findByServerId(user.getServerId());
-                        if(users.size() > 0){
-                            user.setLoggedIn("1");
-                            user.update();
-                        }else {
-                            user.setLoggedIn("1");
-                            user.save();
-                        }
+                        JSONObject userData = jsonObject.getJSONObject("response");
 
-                        Runnable runnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                mSignIn.revertAnimation();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        };
-                        new Handler().postDelayed(runnable, 500);
+                        String userID = userData.getString("serverId");
+                        String username = userData.getString("username");
+                        String email = userData.getString("email");
+
+                        User user;
+                        List<User> userAlready = User.findByServerId(userID);
+
+                        if(userAlready.size() > 0){
+                            user = userAlready.get(0);
+                            user.setLoggedIn("1");
+                        }else{
+                            user = new User(userID, username, email, "1");
+
+                        }
+                        user.save();
+
+                        mSignIn.revertAnimation();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
 
                     } else {
+                        mSignIn.revertAnimation();
                         Utils.showSnackBar(view, error, Snackbar.LENGTH_SHORT);
                     }
                 }catch (Exception e){
+                    mSignIn.revertAnimation();
                     e.printStackTrace();
                     Utils.showSnackBar(view, e.getMessage(), Snackbar.LENGTH_SHORT);
                 }
 
             } else {
+                mSignIn.revertAnimation();
                 Utils.showSnackBar(view, "Some error occurred. Please try again.", Snackbar.LENGTH_SHORT);
             }
-
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    mSignIn.revertAnimation();
-                }
-            };
-
-            new Handler().postDelayed(runnable, 500);
-
         }
     }
 
@@ -211,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         params.put("password", password);
 
         NetworkConnection networkConnection = new NetworkConnection();
-        String loginApi = "http://104.131.71.64/admin/api/login";
+        String loginApi = getString(R.string.api_login);
 
         return networkConnection.performPostCall(loginApi, params);
     }

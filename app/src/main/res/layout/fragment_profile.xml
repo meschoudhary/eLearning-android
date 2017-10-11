@@ -60,12 +60,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_screen_heading_view"
-        android:padding="@dimen/_10sdp"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/_20sdp"
         android:background="@color/colorWhite">
 
-        <RelativeLayout
+        <!--<RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -74,14 +72,22 @@
                 android:layout_height="wrap_content"
                 android:text="@string/profile_saved_heading"/>
 
-        </RelativeLayout>
+        </RelativeLayout>-->
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/saved_courses_reycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp">
+            android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/user_learning_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackgroundGrey">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
     </LinearLayout>

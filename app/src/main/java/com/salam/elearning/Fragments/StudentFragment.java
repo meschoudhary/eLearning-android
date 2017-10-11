@@ -2,19 +2,23 @@ package com.salam.elearning.Fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +26,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.salam.elearning.Adapters.CourseAdapter;
 import com.salam.elearning.Adapters.SkillAdapter;
 import com.salam.elearning.MainActivity;
-import com.salam.elearning.Models.Course;
 import com.salam.elearning.Models.Skill;
 import com.salam.elearning.Models.User;
-import com.salam.elearning.ProfileActivity;
 import com.salam.elearning.R;
+import com.salam.elearning.SearchActivity;
 import com.salam.elearning.Utils.NetworkConnection;
+import com.salam.elearning.Utils.TypefaceSpan;
 import com.salam.elearning.Utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -52,11 +55,7 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
     private Context context;
     private View fragmentView;
 
-
-    private Toolbar toolbar;
-    private TextView toolbarTitle;
-    private CircleImageView toolbarImage;
-    private ImageView toolbarBack;
+    private CollapsingToolbarLayout collapsingToolbar;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -65,18 +64,19 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
 
     private CircleImageView mProfileImage;
     private TextView mProfileUsername;
-    private TextView mProfileDesignationCompany;
-
-    private TextView mStudentAddMoreSkill;
 
     private ArrayList<Skill> allSkills;
-    private RecyclerView mStudentSkillsRecyclerView;
     private SkillAdapter mStudentRecylcerAdpter;
 
     public StudentFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,22 +87,21 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
         userID = getArguments().getString("userID");
         mSwipeRefreshLayout = fragmentView.findViewById(R.id.swipeRefreshLayout);
 
-        toolbar = fragmentView.findViewById(R.id.toolbar);
-        toolbarTitle = toolbar.findViewById(R.id.profile_username_toolbar);
-        toolbarBack = toolbar.findViewById(R.id.profile_back);
-        toolbarImage = toolbar.findViewById(R.id.toolbar_profile);
-        toolbarBack.setOnClickListener(this);
+        collapsingToolbar = fragmentView.findViewById(R.id.toolbar_layout);
+
+        collapsingToolbar.setExpandedTitleTextAppearance(R.style.expandedappbar);
+        collapsingToolbar.setContentScrimColor(ContextCompat.getColor(context, R.color.colorAccent));
+        collapsingToolbar.setStatusBarScrimColor(ContextCompat.getColor(context, R.color.colorAccent));
 
         mProfileImage = fragmentView.findViewById(R.id.student_profile_image);
         mProfileUsername = fragmentView.findViewById(R.id.student_username);
-        mProfileDesignationCompany = fragmentView.findViewById(R.id.student_designation_company);
 
-        mStudentAddMoreSkill = fragmentView.findViewById(R.id.student_add_more_skills);
+        TextView mStudentAddMoreSkill = fragmentView.findViewById(R.id.student_add_more_skills);
         mStudentAddMoreSkill.setOnClickListener(this);
 
         allSkills = new ArrayList<>();
-        mStudentSkillsRecyclerView = fragmentView.findViewById(R.id.student_skill_recycler_view);
-        mStudentRecylcerAdpter = new SkillAdapter(context , allSkills, R.layout.cell_skill, userID, fragmentView);
+        RecyclerView mStudentSkillsRecyclerView = fragmentView.findViewById(R.id.student_skill_recycler_view);
+        mStudentRecylcerAdpter = new SkillAdapter(context , allSkills, R.layout.cell_skil_delete, userID, fragmentView);
         mStudentSkillsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mStudentSkillsRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         mStudentSkillsRecyclerView.addItemDecoration(dividerItemDecoration);
@@ -130,11 +129,11 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
 
         switch (view.getId()){
 
-            case R.id.profile_back:
+            /*case R.id.profile_back:
 
                 getFragmentManager().popBackStack();
 
-                break;
+                break;*/
 
             case R.id.student_add_more_skills:
 
@@ -174,7 +173,7 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
             params.put("userID", userID);
 
             NetworkConnection networkConnection = new NetworkConnection();
-            String loginApi = "http://104.131.71.64/admin/api/getstudent";
+            String loginApi = getString(R.string.api_get_student);
             response = networkConnection.performPostCall(loginApi, params);
 
             return response;
@@ -224,15 +223,14 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
                         else if(!designation.isEmpty() && company.isEmpty())
                             designationCompany = designation;
 
-                        toolbarTitle.setText(username);
-                        Picasso.with(context)
+                        collapsingToolbar.setTitle(username);
+                        /*Picasso.with(context)
                                 .load(Uri.parse(imageHost + user.getString("profile_pic")))
                                 .placeholder(R.drawable.cover_placeholder)
                                 .error(R.drawable.cover_error)
-                                .into(toolbarImage);
+                                .into(toolbarImage);*/
 
                         mProfileUsername.setText(username);
-                        mProfileDesignationCompany.setText(designationCompany);
 
                         for (int i = 0; i < skills.length(); i++){
                             JSONObject skillData = skills.getJSONObject(i);
@@ -259,6 +257,12 @@ public class StudentFragment extends Fragment implements View.OnClickListener {
                 Utils.showSnackBar(fragmentView, "Some error occurred. Please try again.", Snackbar.LENGTH_SHORT);
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((MainActivity) getActivity()).getSupportActionBar().show();
     }
 
 }

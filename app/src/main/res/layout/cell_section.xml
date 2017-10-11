@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/section_cell_container"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/_5sdp"
+    android:paddingBottom="@dimen/_5sdp"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_10sdp"
+    android:background="@color/colorWhite">
+
+    <TextView
+        android:id="@+id/course_section"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:padding="@dimen/_5sdp"
+        android:fontFamily="@string/font_family_light"/>
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        android:contentDescription="@string/app_name"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/expand" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/section_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/arrow">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

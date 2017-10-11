@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/course_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.salam.elearning.CourseActivity"
+    android:background="@color/colorBackgroundGrey">
+
+    <com.halilibo.bettervideoplayer.BetterVideoPlayer
+        android:id="@+id/video_player"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_190sdp"
+        app:bvp_autoPlay="false"
+        app:bvp_disableControls="false"
+        app:bvp_hideControlsOnPlay="true"
+        app:bvp_pauseDrawable="@drawable/bvp_action_pause"
+        app:bvp_playDrawable="@drawable/bvp_action_play"
+        app:bvp_restartDrawable="@drawable/bvp_action_restart"
+        app:bvp_captionSize="22sp"
+        app:bvp_captionColor="@color/colorWhite"
+        app:bvp_loadingStyle="RotatingCircle" />
+
+    <RelativeLayout
+        android:id="@+id/course_name_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/video_player"
+        android:background="@color/colorWhite"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/course_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:fontFamily="@string/font_family_regular"/>
+
+        <ImageView
+            android:id="@+id/course_saved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+    <com.ogaclejapan.smarttablayout.SmartTabLayout
+        android:id="@+id/viewpagertab"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorWhite"
+        app:stl_indicatorAlwaysInCenter="false"
+        app:stl_indicatorWithoutPadding="false"
+        app:stl_indicatorInFront="false"
+        app:stl_indicatorInterpolation="smart"
+        app:stl_indicatorGravity="bottom"
+        app:stl_indicatorColor="@color/colorAccent"
+        app:stl_indicatorThickness="4dp"
+        app:stl_indicatorWidth="auto"
+        app:stl_indicatorCornerRadius="2dp"
+        app:stl_overlineColor="#4D000000"
+        app:stl_overlineThickness="0dp"
+        app:stl_underlineColor="#4D000000"
+        app:stl_underlineThickness="1dp"
+        app:stl_dividerColor="@color/colorWhite"
+        app:stl_dividerThickness="0dp"
+        app:stl_defaultTabBackground="?attr/selectableItemBackground"
+        app:stl_defaultTabTextAllCaps="true"
+        app:stl_defaultTabTextColor="@color/colorAccent"
+        app:stl_defaultTabTextSize="12sp"
+        app:stl_defaultTabTextHorizontalPadding="16dp"
+        app:stl_defaultTabTextMinWidth="0dp"
+        app:stl_distributeEvenly="true"
+        app:stl_clickable="true"
+        app:stl_titleOffset="24dp"
+        app:stl_drawDecorationAfterTab="false"
+        android:layout_below="@+id/course_name_container"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/viewpagertab"/>
+
+</RelativeLayout>
